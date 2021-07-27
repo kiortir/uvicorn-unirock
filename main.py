@@ -24,10 +24,22 @@ def get_db():
         db.close()
 
 
-def update_token(db: Session = Depends(get_db), token_type: str = 'refresh_token'):
+async def update_token(db: Session = Depends(get_db), token_type: str = 'refresh_token'):
     token = crud.get_token(db, token_type=token_type)
     new_tokens = get_new_tokens(token, token_type)
     crud.update_lead(db, new_tokens)
+
+
+async def check_token(db: Session = Depends(get_db)):
+    def token_expired():
+        exp_time = crud.get_token(db, 'expiration_time')
+        now = time.time()
+        return now > float(exp_time)
+
+    if token_expired():
+        await update_token(db)
+        return True
+    return False
 
 
 def refresh_leads(access_token: str, db: Session = Depends(get_db)):
@@ -120,6 +132,7 @@ async def show_leads(db: Session = Depends(get_db)):
 @app.post("/webhook/",
           description='Принимает webhook AmoCrm, обрабатывает его, и заносит в БД (если актуально)')
 async def handle_webhook(q: Request, db: Session = Depends(get_db)):
+    await check_token(db)
     query = await q.body()
     data = qsparser.parse(query, normalized=True)
     z = await handle_hook(data=data, db=db)
