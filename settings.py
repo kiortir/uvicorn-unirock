@@ -9,7 +9,7 @@ def auth_token():
     return os.getenv('AUTH_TOKEN')
 
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_URL').replace('postgres://', 'postgresql://')
 
 if __name__ == '__main__':
     pass
