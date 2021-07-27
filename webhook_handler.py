@@ -18,6 +18,7 @@ async def handle_hook(data: dict, db: Session) -> int:
 
     def serialize() -> models.Lead:
         try:
+            # none
             custom_fields = lead_fields['custom_fields']
         except KeyError:
             custom_fields = []
