@@ -1,5 +1,5 @@
 import time
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import FastAPI, Request, Depends
 from querystring_parser import parser as qsparser
@@ -110,6 +110,11 @@ async def refresh(db: Session = Depends(get_db)):
     access_token = crud.get_token(db, 'access_token')
     refresh_leads(access_token, db=db)
     return {"refresh: 'success'"}
+
+
+@app.get("/leads", response_model=List[schemas.Lead])
+async def show_leads(db: Session = Depends(get_db)):
+    return crud.show_leads(db)
 
 
 @app.post("/webhook/",

@@ -45,6 +45,10 @@ def insert_lead(db: Session, data: models.Lead):
     return True
 
 
+def show_leads(db: Session):
+    return db.query(models.Lead).all()
+
+
 def reset_leads(db: Session, data: List):
     db.query(models.Lead).delete()
     db.bulk_save_objects(data)
