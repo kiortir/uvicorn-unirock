@@ -7,7 +7,7 @@ class Lead(BaseModel):
     lead_id: int
     material: Optional[str] = None
     specialist: Optional[str] = None
-    deal_number: Optional[int] = None
+    deal_number: Optional[str] = None
     start_date: Optional[str] = None
     deal_duration: Optional[int] = None
     work_duration: Optional[str] = None
