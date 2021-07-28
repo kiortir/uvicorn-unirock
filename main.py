@@ -113,15 +113,32 @@ async def auth(q: Optional[str] = None):
         auth_token = q
     else:
         auth_token = settings.auth_token()
-    update_token(token_type=auth_token)
+    await update_token(token_type=auth_token)
     return {'result': 'success!'}
 
 
-@app.get("/refresh")
+@app.post('/reload-tokens',
+          description="Обновляет токены по refresh токену",
+          status_code=200)
+async def reload_tokens(db: Session = Depends(get_db)):
+    await update_token(db, token_type='refresh_token')
+    return {"reload: 'success'"}
+
+
+@app.get("/refresh",
+         description='сбрасывает и обновляет БД')
 async def refresh(db: Session = Depends(get_db)):
     access_token = crud.get_token(db, 'access_token')
     refresh_leads(access_token, db=db)
     return {"refresh: 'success'"}
+
+
+@app.get("/api/leads", response_model=List[List])
+async def show_leads_machine(db: Session = Depends(get_db)):
+    data = crud.show_leads(db)
+    schema_data = [schemas.Lead.from_orm(x) for x in data]
+    data = [(x[1] for x in y) for y in schema_data]
+    return data
 
 
 @app.get("/leads", response_model=List[schemas.Lead])
