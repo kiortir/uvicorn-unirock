@@ -10,7 +10,7 @@ def calc_data(lead: schemas.ResultLead) -> models.AdditionalLead:
     left_till_deadline = dates_calc.overtime(deadline)
     return models.AdditionalLead(lead_id=lead.lead_id, end_date=end_date, deadline=deadline, overtime=overtime,
                                  left_till_deadline=left_till_deadline)
-
+    #none
 
 if __name__ == '__main__':
     pass
