@@ -153,6 +153,11 @@ async def show_leads(db: Session = Depends(get_db)):
     return crud.show_leads(db)
 
 
+@app.get("/a-leads", response_model=List[schemas.ResultLead])
+async def show_add_leads(db: Session = Depends(get_db)):
+    return crud.show_add_leads(db)
+
+
 @app.post("/webhook/",
           description='Принимает webhook AmoCrm, обрабатывает его, и заносит в БД (если актуально)')
 async def handle_webhook(q: Request, db: Session = Depends(get_db)):

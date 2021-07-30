@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import requests
 from datetime import datetime, timedelta
 
@@ -34,7 +34,9 @@ def true_duration(start_date: datetime, duration: int, inclusive: bool = True, d
     return (start_date - true_end(start_date=start_date, duration=duration, inclusive=inclusive, dayoffs=dayoffs)).days
 
 
-def deadline(end_date: datetime, work_duration: int, dayoffs: Tuple[List[int]] = get_dayoffs()):
+def deadline(end_date: datetime, work_duration: Optional[int], dayoffs: Tuple[List[int]] = get_dayoffs()):
+    if work_duration is None:
+        return None
     return true_end(end_date, -work_duration, dayoffs=dayoffs, inclusive=False)
 
 

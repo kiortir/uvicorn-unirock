@@ -10,6 +10,10 @@ def get_lead(db: Session, lead_id: int):
     return db.query(models.Lead).get(lead_id)  # filter(models.Lead.lead_id == lead_id).first()
 
 
+def get_additional_lead(db: Session, lead_id: int):
+    return db.query(models.AdditionalLead).get(lead_id)
+
+
 def get_token(db: Session, token_type: str) -> str:
     return db.query(models.Tokens).get(token_type).token_value  # filter(models.Tokens.token_type == token_type).first()
 
@@ -63,6 +67,10 @@ def insert_additional_info(db: Session, data: models.Lead):
 
 def show_leads(db: Session):
     return db.query(models.Lead).all()
+
+
+def show_add_leads(db: Session):
+    return db.query(models.AdditionalLead).all()
 
 
 def reset_leads(db: Session, data: List):
