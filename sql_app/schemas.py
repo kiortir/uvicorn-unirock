@@ -1,21 +1,28 @@
 from typing import Optional
-
+from datetime import datetime
 from pydantic import BaseModel
 
 
-class Lead(BaseModel):
+class ResultLead(BaseModel):
     lead_id: int
     material: Optional[str] = None
     specialist: Optional[str] = None
     deal_number: Optional[str] = None
-    start_date: Optional[str] = None
+    start_date: Optional[datetime] = None
     deal_duration: Optional[int] = None
-    work_duration: Optional[str] = None
-    work_start: Optional[str] = None
-    secs: Optional[str] = None
+    work_duration: Optional[int] = None
+    work_start: Optional[datetime] = None
 
     class Config:
         orm_mode = True
+
+
+class AdditionalLead(BaseModel):
+    lead_id: int
+    deadline: datetime
+    end_date: datetime
+    overtime: int
+    left_till_deadline: int
 
 
 class Token(BaseModel):

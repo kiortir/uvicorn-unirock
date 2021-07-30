@@ -32,7 +32,8 @@ def get_new_tokens(token: str, token_type: str) -> dict:
     else:
         data = '{"client_id":"04bfd9ed-3fc2-4eec-8f68-48adcb24960e","client_secret":"79ldWvYS2IfZEK3WdINDPPEfvfQ7BjVp1RAYHKYz1olfGtZGEDCeIG8UjCubWGod","grant_type":"authorization_code","code": "%s","redirect_uri":"https://unirock.ru/"}' % (
             token)
-    response = requests.post(url, headers=headers, data=data)
+
+    response = requests.post(url, headers=headers, data=data, timeout=5)
     if response.status_code != 200:
         raise Exception('Auth issues, enter new auth token')
     tokens = response.json()

@@ -15,9 +15,14 @@ def get_token(db: Session, token_type: str) -> str:
 
 
 def set_tokens(db: Session, tokens: dict):
-    tokens['expiration_time'] = tokens['expiration_time'] + time() - 600
-    for token_type, token_value in tokens:
-        db.execute('UPDATE tokens SET token_value = "%s" WHERE token_type = "%s' % (token_value, token_type))
+    del tokens['token_type']
+    print('*' * 50)
+    print(tokens)
+    print('*' * 50)
+    tokens['expiration_time'] = tokens['expires_in'] + time() - 600
+    del tokens['expires_in']
+    for token_type, token_value in tokens.items():
+        db.execute("UPDATE tokens SET token_value = '%s' WHERE token_type = '%s'" % (token_value, token_type))
     db.commit()
 
 
@@ -30,6 +35,12 @@ def delete_lead(db: Session, lead_id: int):
     db.delete(q)
     db.commit()
     return True
+
+
+def update_additional_values(db: Session, data: models.AdditionalLead):
+    q = db.query(models.Lead).filter(models.AdditionalLead.lead_id == data.lead_id)
+    q.update(data)
+    db.commit()
 
 
 def update_lead(db: Session, data: dict):
@@ -45,6 +56,11 @@ def insert_lead(db: Session, data: models.Lead):
     return True
 
 
+def insert_additional_info(db: Session, data: models.Lead):
+    db.add(data)
+    db.commit()
+
+
 def show_leads(db: Session):
     return db.query(models.Lead).all()
 
@@ -53,4 +69,13 @@ def reset_leads(db: Session, data: List):
     db.query(models.Lead).delete()
     db.bulk_save_objects(data)
     db.commit()
-    # db.bulk_save_objects(data)
+
+
+def reset_addition_values(db: Session, data: List[models.AdditionalLead]):
+    db.query(models.AdditionalLead).delete()
+    db.bulk_save_objects(data)
+    db.commit()
+
+
+def create_lead_props(db: Session):
+    db.execute("CREATE TABLE lead_props (lead_id INTEGER, deadline date)")
