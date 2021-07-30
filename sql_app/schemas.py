@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -8,10 +8,10 @@ class ResultLead(BaseModel):
     material: Optional[str] = None
     specialist: Optional[str] = None
     deal_number: Optional[str] = None
-    start_date: Optional[datetime] = None
+    start_date: Optional[Union[None, datetime]] = None
     deal_duration: Optional[int] = None
-    work_duration: Optional[int] = None
-    work_start: Optional[datetime] = None
+    work_duration: Optional[Union[None, int]] = None
+    work_start: Optional[Union[None, datetime]] = None
 
     class Config:
         orm_mode = True

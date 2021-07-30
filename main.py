@@ -1,5 +1,5 @@
 import time
-from typing import Optional, List
+from typing import Optional, List, Union
 from datetime import datetime
 from fastapi import FastAPI, Request, Depends
 from querystring_parser import parser as qsparser
@@ -7,9 +7,11 @@ from sqlalchemy.orm import Session
 
 import settings
 from amo_oauth import *
-from sql_app import crud, models, schemas
+from sql_app import crud, models, schemas, amo_query_schema
 from sql_app.database import SessionLocal, engine
-# from amo_handlers.webhook_handler import handle_hook
+from amo_handlers.query_handler import handle_query
+from amo_handlers.webhook_handler import handle_hook
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -77,7 +79,7 @@ def refresh_leads(access_token: str, db: Session = Depends(get_db)):
     def get_leads(a_token=access_token,
                   url="https://unirock.amocrm.ru/api/v4/leads?limit=250",
                   filter_query='%3Ffilter%5Btags_logic%5D=or&filter%3Ffilter%5Btags_logic%5D=or&filter%5Bpipe%5D%5B946942%5D%5B0%5D=18032857&filter%5Bpipe%5D%5B946942%5D%5B1%5D=18032860&filter%5Bpipe%5D%5B946942%5D%5B2%5D=18032863&filter%5Bpipe%5D%5B946942%5D%5B3%5D=18033010&filter%5Bpipe%5D%5B946942%5D%5B4%5D=18062053&filter%5Bpipe%5D%5B946942%5D%5B5%5D=39719170',
-                  page=1):
+                  page=1) -> Union[List[schemas.ResultLead], None]:
         url = f"{url}&{filter_query}&page={page}"
         headers = CaseInsensitiveDict()
         headers["Authorization"] = "Bearer %s" % a_token
@@ -89,13 +91,14 @@ def refresh_leads(access_token: str, db: Session = Depends(get_db)):
         leads = response.json()['_embedded']['leads']
         next_page = get_leads(page=page + 1)
         if next_page is None:
-            f_leads = collapse_json(leads)
+            # f_leads = collapse_json(leads)
+            f_leads = handle_query(leads)
             return f_leads
         else:
 
             return leads + next_page
-
-    crud.reset_leads(db, get_leads())
+    data = get_leads()
+    crud.reset_leads(db, data)
 
 
 @app.get("/test/{lead_id}", response_model=schemas.ResultLead)
