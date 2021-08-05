@@ -92,12 +92,15 @@ def refresh_leads(access_token: str, db: Session = Depends(get_db)):
         next_page = get_leads(page=page + 1)
         if next_page is None:
             # f_leads = collapse_json(leads)
-            f_leads = handle_query(leads)
+            f_leads = leads
             return f_leads
         else:
             return leads + next_page
 
     data = get_leads()
+    print(data)
+    data = handle_query(data)
+
     crud.reset_leads(db, data)
 
     dayoffs = dates_calc.get_dayoffs()
@@ -147,9 +150,9 @@ async def refresh(db: Session = Depends(get_db)):
 @app.get("/api/leads", response_model=Dict)
 async def show_leads_machine(db: Session = Depends(get_db)):
     data = crud.show_leads(db)
-    print(data[1].work_duration)
     schema_data = [schemas.ResultLead.from_orm(x) for x in data]
-    data = [(x[1] for x in y) for y in schema_data]
+    data = [(item[1] for item in lead) for lead in schema_data]
+
     dates = min_max_date([(lead.start_date, lead.deal_duration) for lead in schema_data])
     return {'min_max_date': dates,
             'leads': data}
@@ -171,6 +174,7 @@ async def handle_webhook(q: Request, db: Session = Depends(get_db)):
     await check_token(db)
     query = await q.body()
     data = qs_parser.parse(query, normalized=True)
+    print(data)
     z = await handle_hook(data=data, db=db)
     return {"status_code": z}
 
