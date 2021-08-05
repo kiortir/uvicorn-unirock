@@ -16,7 +16,7 @@ def is_dayoff(date: datetime, dayoffs: Tuple[List[int]] = get_dayoffs()):
     return date.day in month_dayoffs
 
 
-def true_end(start_date: datetime, duration: int, inclusive: bool = True, dayoffs: Tuple[List[int]] = get_dayoffs()) -> Optional[datetime]:
+def true_end(start_date: Union[da, datetime], duration: int, inclusive: bool = True, dayoffs: Tuple[List[int]] = get_dayoffs()) -> Union[da, None]:
     if start_date is None or duration is None:
         return None
     if duration < 0:
@@ -34,7 +34,7 @@ def true_end(start_date: datetime, duration: int, inclusive: bool = True, dayoff
     return start_date
 
 
-def true_duration(start_date: datetime, duration: int, inclusive: bool = True, dayoffs: Tuple[List[int]] = get_dayoffs()) -> int:
+def true_duration(start_date: da, duration: int, inclusive: bool = True, dayoffs: Tuple[List[int]] = get_dayoffs()) -> int:
     return (start_date - true_end(start_date=start_date, duration=duration, inclusive=inclusive, dayoffs=dayoffs)).days
 
 

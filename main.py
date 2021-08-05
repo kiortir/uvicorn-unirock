@@ -1,5 +1,5 @@
 import time
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict
 from datetime import datetime
 from fastapi import FastAPI, Request, Depends
 from querystring_parser import parser as qs_parser
@@ -11,7 +11,7 @@ from sql_app import crud, models, schemas, amo_query_schema
 from sql_app.database import SessionLocal, engine
 from amo_handlers.query_handler import handle_query
 from amo_handlers.webhook_handler import handle_hook
-from diagram_calc.diagram_calc import calc_data, dates_calc
+from diagram_calc.diagram_calc import calc_data, dates_calc, min_max_date
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -144,13 +144,15 @@ async def refresh(db: Session = Depends(get_db)):
     return {"refresh: 'success'"}
 
 
-@app.get("/api/leads")#, response_model=List[List])
+@app.get("/api/leads", response_model=Dict)
 async def show_leads_machine(db: Session = Depends(get_db)):
     data = crud.show_leads(db)
     print(data[1].work_duration)
     schema_data = [schemas.ResultLead.from_orm(x) for x in data]
     data = [(x[1] for x in y) for y in schema_data]
-    return data
+    dates = min_max_date([(lead.start_date, lead.deal_duration) for lead in schema_data])
+    return {'min_max_date': dates,
+            'leads': data}
 
 
 @app.get("/leads", response_model=List[schemas.ResultLead])
