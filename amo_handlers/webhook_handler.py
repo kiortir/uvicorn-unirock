@@ -57,16 +57,16 @@ async def handle_hook(data: dict, db: Session):
             crud.delete_lead(db, lead_id)
         else:
             new_fields = serialize()
-            additional_data = diagram_calc.calc_data(new_fields)
+            # additional_data = diagram_calc.calc_data(new_fields)
             data = vars(new_fields)
             del data['_sa_instance_state']
             crud.update_lead(db, new_fields)
     else:
         if status_id in IMPORTANT_STATUS and hook_type != 'delete':
             data = serialize()
-            additional_data = diagram_calc.calc_data(data)
+            # additional_data = diagram_calc.calc_data(data)
             crud.insert_lead(db, data)
-            crud.insert_additional_info(db, additional_data)
+            # crud.insert_additional_info(db, additional_data)
     return 200
 
 
