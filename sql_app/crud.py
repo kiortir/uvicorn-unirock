@@ -2,6 +2,8 @@ from time import time
 from typing import List
 
 from sqlalchemy.orm import Session
+from sqlalchemy import MetaData
+from sqlalchemy.sql.expression import literal
 
 from . import models
 
@@ -20,9 +22,6 @@ def get_token(db: Session, token_type: str) -> str:
 
 def set_tokens(db: Session, tokens: dict):
     del tokens['token_type']
-    print('*' * 50)
-    print(tokens)
-    print('*' * 50)
     tokens['expiration_time'] = tokens['expires_in'] + time() - 600
     del tokens['expires_in']
     for token_type, token_value in tokens.items():
@@ -65,12 +64,16 @@ def insert_additional_info(db: Session, data: models.Lead):
     db.commit()
 
 
-def show_leads(db: Session):
+def show_leads(db: Session) -> List[models.Lead]:
     return db.query(models.Lead).all()
 
 
 def show_add_leads(db: Session):
     return db.query(models.AdditionalLead).all()
+
+
+def join_show(db: Session):
+    return db.query(models.Lead, models.AdditionalLead).all()#.join(models.AdditionalLead, literal(True)).all()
 
 
 def reset_leads(db: Session, data: List):
@@ -86,4 +89,6 @@ def reset_addition_values(db: Session, data: List[models.AdditionalLead]):
 
 
 def create_lead_props(db: Session):
+
     db.execute("CREATE TABLE lead_props (lead_id INTEGER, deadline date)")
+

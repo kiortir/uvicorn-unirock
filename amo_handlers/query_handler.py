@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Union
 from sql_app import models
 from pydantic import parse_obj_as
@@ -21,12 +21,12 @@ def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
         else:
             return None
 
-    def secs_to_date(secs: Union[int, str]) -> Union[datetime, None]:
+    def secs_to_date(secs: Union[int, str]) -> Union[date, None]:
         if secs == '' or secs is None:
             return None
         else:
             secs = int(secs)
-        return datetime.fromtimestamp(secs)  # .strftime("%b %d %Y")
+        return date.fromtimestamp(secs)
 
     print(raw_list_of_leads)
     list_of_leads = to_schema_many(raw_list_of_leads)
@@ -35,12 +35,12 @@ def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
     fields = ['lead_id', 'material', 'specialist', 'deal_number', 'start_date', 'deal_duration', 'work_duration',
               'work_start']
     new_data = [models.Lead(**dict(zip(fields, [lead.id,
-                                              gfbi(lead, 19713),
-                                              gfbi(lead, 466963),
-                                              gfbi(lead, 437987),
-                                              secs_to_date(gfbi(lead, 942785)),
-                                              gfbi(lead, 491089),
-                                              gfbi(lead, 934909),
-                                              secs_to_date(gfbi(lead, 942875))]))) for lead in
+                                                gfbi(lead, 19713),
+                                                gfbi(lead, 466963),
+                                                gfbi(lead, 437987),
+                                                secs_to_date(gfbi(lead, 942785)),
+                                                gfbi(lead, 491089),
+                                                gfbi(lead, 934909),
+                                                secs_to_date(gfbi(lead, 942875))]))) for lead in
                 list_of_leads]
     return new_data
