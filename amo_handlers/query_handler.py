@@ -25,7 +25,7 @@ def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
         if secs == '' or secs is None:
             return None
         else:
-            secs = int(secs)
+            secs = int(secs) + 15000
         return date.fromtimestamp(secs)
 
     print(raw_list_of_leads)
@@ -44,6 +44,7 @@ def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
                                                 secs_to_date(gfbi(lead, 942875))]))) for lead in
                 list_of_leads]
     return new_data
+
 
 if __name__ == '__main__':
     print(date.fromtimestamp(1625518800))
