@@ -1,5 +1,5 @@
 from sql_app import amo_webhook_schema, crud, schemas, models
-from datetime import datetime
+from datetime import date
 from typing import Union
 from sqlalchemy.orm import Session
 from diagram_calc import diagram_calc
@@ -22,7 +22,7 @@ async def handle_hook(data: dict, db: Session):
                 return None
             else:
                 secs = int(secs) + 15000
-            return datetime.fromtimestamp(secs)
+            return date.fromtimestamp(secs)
 
         try:
             # none
