@@ -139,6 +139,7 @@ cython_debug/
 
 # secret
 secret.json
+.idea/
 
 # database
 db.sqlite3
