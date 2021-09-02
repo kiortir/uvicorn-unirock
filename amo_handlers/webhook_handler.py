@@ -56,7 +56,7 @@ async def handle_hook(data: dict, db: Session):
             new_fields = deserialize()
             data = vars(new_fields)
             del data['_sa_instance_state']
-            crud.update_lead(db, new_fields)
+            crud.update_lead(db, data)
     elif status_id in IMPORTANT_STATUS and hook_type != 'delete':
         data = deserialize()
         crud.insert_lead(db, data)
