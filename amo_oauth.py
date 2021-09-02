@@ -1,7 +1,7 @@
 import requests
 from requests.structures import CaseInsensitiveDict
 
-from .settings import CLIENT_ID, CLIENT_SECRET
+from settings import CLIENT_ID, CLIENT_SECRET
 
 
 def get_new_tokens(token: str, token_type: str) -> dict:
