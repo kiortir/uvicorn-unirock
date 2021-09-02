@@ -46,6 +46,7 @@ async def check_token(db: Session = Depends(get_db)):
 
 
 def refresh_leads(access_token: str, db: Session = Depends(get_db)):
+    # noinspection SpellCheckingInspection,SpellCheckingInspection,SpellCheckingInspection
     def get_leads(a_token=access_token,
                   url="https://unirock.amocrm.ru/api/v4/leads?limit=250",
                   filter_query='%3Ffilter%5Btags_logic%5D=or&filter%3Ffilter%5Btags_logic%5D=or&filter%5Bpipe%5D%5B946942%5D%5B0%5D=18032857&filter%5Bpipe%5D%5B946942%5D%5B1%5D=18032860&filter%5Bpipe%5D%5B946942%5D%5B2%5D=18032863&filter%5Bpipe%5D%5B946942%5D%5B3%5D=18033010&filter%5Bpipe%5D%5B946942%5D%5B4%5D=18062053&filter%5Bpipe%5D%5B946942%5D%5B5%5D=39719170',
