@@ -1,7 +1,8 @@
-from sql_app import schemas, models
-from . import dates_calc
 from datetime import date
 from typing import List, Tuple, Optional
+
+from sql_app import schemas, models
+from . import dates_calc
 
 
 def calc_data(lead: schemas.ResultLead, dayoffs=dates_calc.get_dayoffs()) -> models.AdditionalLead:
@@ -17,7 +18,8 @@ def calc_data(lead: schemas.ResultLead, dayoffs=dates_calc.get_dayoffs()) -> mod
 
 def min_max_date(dates: List[Tuple[date, int]]) -> Tuple[date, Optional[date]]:
     min_date = min([date_tuple[0] for date_tuple in dates if date_tuple[0]])
-    max_date = max([dates_calc.true_end(date_tuple[0], date_tuple[1], inclusive=False) for date_tuple in dates if date_tuple[0] and date_tuple[1]])
+    max_date = max([dates_calc.true_end(date_tuple[0], date_tuple[1], inclusive=False) for date_tuple in dates if
+                    date_tuple[0] and date_tuple[1]])
     return min_date, max_date
 
 

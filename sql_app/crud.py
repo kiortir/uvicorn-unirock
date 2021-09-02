@@ -2,8 +2,6 @@ from time import time
 from typing import List
 
 from sqlalchemy.orm import Session
-from sqlalchemy import MetaData
-from sqlalchemy.sql.expression import literal
 
 from . import models
 
@@ -73,7 +71,7 @@ def show_add_leads(db: Session):
 
 
 def join_show(db: Session):
-    return db.query(models.Lead, models.AdditionalLead).all()#.join(models.AdditionalLead, literal(True)).all()
+    return db.query(models.Lead, models.AdditionalLead).all()
 
 
 def reset_leads(db: Session, data: List):
@@ -89,6 +87,4 @@ def reset_addition_values(db: Session, data: List[models.AdditionalLead]):
 
 
 def create_lead_props(db: Session):
-
     db.execute("CREATE TABLE lead_props (lead_id INTEGER, deadline date)")
-

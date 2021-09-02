@@ -1,9 +1,10 @@
-from datetime import datetime, date
+from datetime import date
 from typing import List, Union
-from sql_app import models
+
 from pydantic import parse_obj_as
 
 from sql_app import amo_query_schema, schemas
+from sql_app import models
 
 
 def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
