@@ -19,7 +19,7 @@ async def handle_hook(data: dict, db: Session):
 
     def deserialize() -> models.Lead:
         def secs_to_date(secs: Union[int, str]) -> Union[date, None]:
-            if secs == '':
+            if not secs:
                 return None
             else:
                 secs = int(secs) + 15000

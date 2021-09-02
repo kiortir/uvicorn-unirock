@@ -12,8 +12,6 @@ def get_dayoffs() -> Tuple[List[int]]:
 
 def is_dayoff(date: datetime, dayoffs: Tuple[List[int]] = get_dayoffs()):
     month_dayoffs = dayoffs[date.month - 1]
-    # print(date)
-    # print(f'{dayoffs}: dayoffs: {month_dayoffs}', f'month: {dayoffs[date.month-1]}', f'date: {date.day}')
     return date.day in month_dayoffs
 
 
@@ -41,7 +39,7 @@ def true_duration(start_date: da, duration: int, inclusive: bool = True,
     return (start_date - true_end(start_date=start_date, duration=duration, inclusive=inclusive, dayoffs=dayoffs)).days
 
 
-def deadline(end_date: datetime, work_duration: Optional[int], dayoffs: Tuple[List[int]] = get_dayoffs()):
+def deadline(end_date: Union[da, datetime], work_duration: Optional[int], dayoffs: Tuple[List[int]] = get_dayoffs()):
     if work_duration is None or end_date is None:
         return None
     return true_end(end_date, -work_duration, dayoffs=dayoffs, inclusive=False)
@@ -53,5 +51,9 @@ def overtime(end_date: da) -> Union[int, None]:
     return (datetime.now().date() - end_date).days
 
 
+def main():
+    pass
+
+
 if __name__ == '__main__':
-    print(da(2021, 7, 6))
+    pass

@@ -7,7 +7,7 @@ from . import models
 
 
 def get_lead(db: Session, lead_id: int):
-    return db.query(models.Lead).get(lead_id)  # filter(models.Lead.lead_id == lead_id).first()
+    return db.query(models.Lead).get(lead_id)
 
 
 def get_additional_lead(db: Session, lead_id: int):
@@ -15,7 +15,7 @@ def get_additional_lead(db: Session, lead_id: int):
 
 
 def get_token(db: Session, token_type: str) -> str:
-    return db.query(models.Tokens).get(token_type).token_value  # filter(models.Tokens.token_type == token_type).first()
+    return db.query(models.Tokens).get(token_type).token_value
 
 
 def set_tokens(db: Session, tokens: dict):

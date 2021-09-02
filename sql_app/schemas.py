@@ -1,5 +1,6 @@
+from datetime import date
 from typing import Optional, Union
-from datetime import datetime, date, timedelta
+
 from pydantic import BaseModel
 
 

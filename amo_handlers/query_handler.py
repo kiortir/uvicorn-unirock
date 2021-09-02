@@ -15,21 +15,20 @@ def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
         list_of_dicts = lead_values.custom_fields_values
         if list_of_dicts is None:
             return ''
-        fields = list(filter(lambda field: field.field_id == field_id, list_of_dicts))
-        if fields:
-            field = fields[0]
+        list_of_fields = list(filter(lambda f: f.field_id == field_id, list_of_dicts))
+        if list_of_fields:
+            field = list_of_fields[0]
             return field.values[0].value
         else:
-            return None
+            return ''
 
     def secs_to_date(secs: Union[int, str]) -> Union[date, None]:
-        if secs == '' or secs is None:
+        if not secs:
             return None
         else:
             secs = int(secs) + 15000
         return date.fromtimestamp(secs)
 
-    print(raw_list_of_leads)
     list_of_leads = to_schema_many(raw_list_of_leads)
 
     gfbi = get_field_by_id
@@ -47,5 +46,9 @@ def handle_query(raw_list_of_leads: List[dict]) -> List[schemas.ResultLead]:
     return new_data
 
 
+def main():
+    pass
+
+
 if __name__ == '__main__':
-    print(date.fromtimestamp(1625518800))
+    main()
