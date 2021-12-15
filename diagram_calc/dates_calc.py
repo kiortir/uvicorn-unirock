@@ -7,7 +7,7 @@ import requests
 def get_dayoffs() -> Tuple[List[int]]:
     year = datetime.now().year
     day_offs = requests.get(f'http://xmlcalendar.ru/data/ru/{year}/calendar.json').json()['months']
-    return tuple([[int(day) for day in month_dict['days'].split(',') if day.find('*') < 0 or day.find('+') < 0] for month_dict in day_offs])
+    return tuple([[int(day) for day in month_dict['days'].split(',') if (day.find('*') < 0 and day.find('+') < 0)] for month_dict in day_offs])
 
 
 def is_dayoff(date: datetime, dayoffs: Tuple[List[int]] = get_dayoffs()):
