@@ -121,7 +121,7 @@ async def show_leads_machine(db: Session = Depends(get_db)):
 
 
 @app.get("/leads", response_model=List[schemas.ResultLead])
-async def show_leads(db: Session = Depends(get_db)):
+async def show_leads(request: Request, db: Session = Depends(get_db)):
     return crud.show_leads(db)
 
 
