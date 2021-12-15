@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 import settings
 from amo_handlers.query_handler import handle_query
 from amo_handlers.webhook_handler import handle_hook
-from amo_oauth import *
+from amo_oauth import get_new_tokens
 from diagram_calc.diagram_calc import min_max_date
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
